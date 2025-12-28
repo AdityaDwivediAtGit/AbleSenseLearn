@@ -1,158 +1,47 @@
-# **AbleSense Learn – Inclusive Education Platform**
+# Able Sense AI Buddy
 
-## **Project Overview**
+**Able Sense AI Buddy** is a comprehensive AI assistant designed to help people with disabilities in their daily lives.
 
-AbleSense Learn is an AI-powered adaptive learning platform designed to adjust educational content to the unique needs of students with disabilities. The platform uses machine learning to simplify text, generate multimodal content, and personalize learning pathways.
+## Features
 
----
+- **👁️ Vision Assistant**: Describes surroundings and objects using phone camera or file upload.
+- **🗣️ Voice Companion**: Hands-free voice interaction for commands and chat.
+- **📚 Learning & Simplification**: Simplifies complex text and summarizes long articles.
+- **⚙️ Adaptive Profile**: Customizes the usage experience based on Visual, Hearing, Motor, or Cognitive needs.
+- **🆘 Emergency Mode**: Quick access to alert contacts.
 
-## **Features**
+## Installation
 
-* **Dynamic Text Adaptation** – AI-powered simplification & summarization
-* **Multimodal Content** – Alt-text generation, audio descriptions, tactile diagrams
-* **Personalized Learning** – Adaptive pathways based on learning profiles
-* **Accessibility-First Design** – WCAG 2.2 AA–compliant interface with multiple accessibility themes
-* **Engagement Monitoring** – AI-based frustration detection and learning pattern analysis
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-repo/ablesense.git
+    cd AbleSenseLearn
+    ```
 
----
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-## **Tech Stack**
+3.  **Setup Environment:**
+    - Copy `.env.example` to `.env`
+    - Add your `OPENAI_API_KEY`
 
-* **Backend:** Python Flask
-* **Frontend:** HTML5, CSS3, Vanilla JavaScript
-* **AI/ML:** Transformers, OpenCV, NLTK
-* **Database:** SQLite (dev) / PostgreSQL (prod)
-* **APIs:** Hugging Face, Google TTS (optional)
+4.  **Initialize Database:**
+    ```bash
+    python setup_database.py
+    ```
 
----
+5.  **Run the App:**
+    ```bash
+    streamlit run app.py
+    ```
 
-## **Quick Start**
+## Technology Stack
 
-### **Prerequisites**
+- **Frontend**: Streamlit
+- **AI/ML**: OpenAI GPT-3.5 (Text), YOLOv8 (Vision), SpeechRecognition & pyttsx3 (Voice)
+- **Database**: SQLite (via SQLAlchemy)
 
-* Python **3.8+**
-* `pip` package manager
-
----
-
-## **Installation**
-
-### 1. **Clone the repository**
-
-```bash
-git clone https://github.com/yourusername/able-sense-learn.git
-cd able-sense-learn
-```
-
-### 2. **Create a virtual environment**
-
-```bash
-python -m venv venv
-```
-
-Activate it:
-
-**macOS/Linux**
-
-```bash
-source venv/bin/activate
-```
-
-**Windows**
-
-```bash
-venv\Scripts\activate
-```
-
-### 3. **Install dependencies**
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. **Set up environment variables**
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` with your configuration.
-
-### 5. **Initialize the database**
-
-```bash
-python setup_database.py
-```
-
-### 6. **Run the application**
-
-```bash
-python app.py
-```
-
-Open your browser and go to:
-
-👉 [http://localhost:5000](http://localhost:5000)
-
----
-
-## **Project Structure**
-
-```
-app.py                 # Main Flask application
-ai_services/           # AI and ML services
-api/                   # API endpoints
-static/                # CSS, JS, images
-templates/             # HTML templates
-models/                # Database models
-utils/                 # Utility functions
-```
-
----
-
-## **Configuration**
-
-Create a `.env` file with:
-
-```
-FLASK_ENV=development
-SECRET_KEY=your-secret-key-here
-DATABASE_URL=sqlite:///ablelearn.db
-HUGGINGFACE_TOKEN=your-huggingface-token
-GOOGLE_API_KEY=your-google-api-key
-```
-
----
-
-## **Testing**
-
-### Run the full test suite:
-
-```bash
-python -m pytest tests/
-```
-
-### Run accessibility tests only:
-
-```bash
-python -m pytest tests/test_accessibility.py
-```
-
----
-
-## **API Documentation**
-
-See **docs/api_documentation.md** for detailed API reference.
-
----
-
-## **Accessibility Features**
-
-* Keyboard navigation
-* Screen reader compatibility
-* Multiple color themes
-* Adjustable text size and spacing
-* Voice command interface
-* Alternative content formats
-
----
+## Accessibility
+Designed with WCAG principles, supporting screen readers and keyboard navigation.
