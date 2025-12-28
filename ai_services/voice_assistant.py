@@ -2,31 +2,58 @@ import speech_recognition as sr
 import pyttsx3
 import threading
 import queue
+import os
+from gtts import gTTS
 from config import Config
+import tempfile
 
 class VoiceAssistant:
     def __init__(self):
         self.recognizer = sr.Recognizer()
-        self.engine = pyttsx3.init()
         self.is_listening = False
-        self.command_queue = queue.Queue()
         
-        # Configure voice
-        self.engine.setProperty('rate', Config.VOICE_RATE)
-        volumes = self.engine.getProperty('volume')
-        self.engine.setProperty('volume', Config.VOICE_VOLUME)
+        # Try initializing pyttsx3, but don't crash if it fails (common in linux/cloud)
+        try:
+            self.engine = pyttsx3.init()
+            self.engine.setProperty('rate', Config.VOICE_RATE)
+            self.engine.setProperty('volume', Config.VOICE_VOLUME)
+            self.pyttsx3_available = True
+        except Exception as e:
+            print(f"Warning: pyttsx3 initialization failed ({e}). Using gTTS only.")
+            self.engine = None
+            self.pyttsx3_available = False
 
     def speak(self, text):
-        """Text-to-Speech output."""
+        """
+        Converts text to speech and returns the path to the audio file.
+        Returns: (audio_file_path, is_temp_file)
+        """
         try:
-            # Re-init engine in thread if needed for stability in Streamlit
-            # Note: pyttsx3 can be tricky with threads. 
-            # For Streamlit, we might prefer gTTS or client-side JS solutions for stability,
-            # but we'll attempt local server-side playback first as requested.
-            self.engine.say(text)
-            self.engine.runAndWait()
+            # Priority 1: gTTS (Better quality, works in cloud)
+            # Create a temp file
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as fp:
+                temp_path = fp.name
+                
+            tts = gTTS(text=text, lang='en')
+            tts.save(temp_path)
+            return temp_path, True
+            
         except Exception as e:
-            print(f"TTS Error: {e}")
+            print(f"gTTS failed ({e}), trying pyttsx3...")
+            
+            # Priority 2: pyttsx3 (Offline fallback)
+            if self.pyttsx3_available and self.engine:
+                try:
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as fp:
+                        temp_path = fp.name
+                    # Saving to file instead of saying immediately
+                    self.engine.save_to_file(text, temp_path)
+                    self.engine.runAndWait()
+                    return temp_path, True
+                except Exception as e2:
+                    print(f"pyttsx3 failed: {e2}")
+            
+            return None, False
 
     def listen_for_command(self):
         """
@@ -49,10 +76,3 @@ class VoiceAssistant:
             print(f"Mic Error: {e}")
             return None
 
-    def start_wake_word_listener(self):
-        """
-        Background thread to listen for a wake word (e.g., 'Hey Buddy').
-        """
-        # Note: In Streamlit, long-running background threads can be tricky due to reruns.
-        # We might implement this as a session_state flag check or specific 'Listen Mode'.
-        pass 

@@ -94,7 +94,12 @@ def render_vision():
         st.markdown(f"### {description}")
         
         if st.button("🔊 Read Aloud"):
-            services['voice'].speak(description)
+            audio_path, is_temp = services['voice'].speak(description)
+            if audio_path:
+                st.audio(audio_path, format='audio/mp3', autoplay=True)
+                if is_temp:
+                    # Clean up is tricky in Streamlit reruns, but we rely on OS temp cleaner or handle later
+                    pass
 
 def render_voice_companion():
     st.header("🗣️ Voice Companion")
@@ -120,7 +125,9 @@ def render_voice_companion():
                     response = f"The current time is {datetime.now().strftime('%H:%M')}."
                 
                 st.session_state.messages.append({"role": "assistant", "content": response})
-                services['voice'].speak(response)
+                audio_path, is_temp = services['voice'].speak(response)
+                if audio_path:
+                    st.audio(audio_path, format='audio/mp3', autoplay=True)
                 st.rerun()
             else:
                 st.warning("I couldn't hear you. Please try again.")
@@ -148,7 +155,9 @@ def render_learning():
         st.markdown("### Result:")
         st.write(result)
         if st.button("🔊 Read Result"):
-            services['voice'].speak(result)
+            audio_path, is_temp = services['voice'].speak(result)
+            if audio_path:
+                st.audio(audio_path, format='audio/mp3', autoplay=True)
 
 def render_settings(user, db_session):
     st.header("⚙️ Settings")
