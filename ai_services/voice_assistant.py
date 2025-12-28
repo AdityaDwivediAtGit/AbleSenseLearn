@@ -6,6 +6,7 @@ import os
 from gtts import gTTS
 from config import Config
 import tempfile
+from utils.debug import debug_trace
 
 class VoiceAssistant:
     def __init__(self):
@@ -23,6 +24,7 @@ class VoiceAssistant:
             self.engine = None
             self.pyttsx3_available = False
 
+    @debug_trace
     def speak(self, text):
         """
         Converts text to speech and returns the path to the audio file.
@@ -55,6 +57,7 @@ class VoiceAssistant:
             
             return None, False
 
+    @debug_trace
     def listen_for_command(self):
         """
         One-shot listening for a command (used when button pressed).

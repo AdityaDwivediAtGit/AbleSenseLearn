@@ -1,6 +1,7 @@
 import openai
 from config import Config
 from transformers import pipeline
+from utils.debug import debug_trace
 
 class TextProcessor:
     def __init__(self):
@@ -13,18 +14,21 @@ class TextProcessor:
         self._summarizer = None
         self._generator = None
 
+    @debug_trace
     def _get_summarizer(self):
         if not self._summarizer:
             # Using a small, efficient model for local execution
             self._summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
         return self._summarizer
 
+    @debug_trace
     def _get_generator(self):
         if not self._generator:
             # Flan-T5 is great for instruction following like "Simplify this"
             self._generator = pipeline("text2text-generation", model="google/flan-t5-small")
         return self._generator
 
+    @debug_trace
     def simplify_text(self, text, level="simple"):
         """
         Simplifies text for easier reading.
@@ -37,6 +41,7 @@ class TextProcessor:
         else:
             return self._simplify_with_hf(text, level)
 
+    @debug_trace
     def summarize_text(self, text):
         """Summarizes long text."""
         if self.use_openai:

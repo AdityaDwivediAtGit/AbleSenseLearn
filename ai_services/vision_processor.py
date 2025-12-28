@@ -2,17 +2,20 @@ from ultralytics import YOLO
 import cv2
 import numpy as np
 from PIL import Image
+from utils.debug import debug_trace
 
 class VisionProcessor:
     def __init__(self):
         # Initialize YOLO model (lazily loaded to speed up app start)
         self.model = None
-        
+
+    @debug_trace
     def _load_model(self):
         if self.model is None:
             # Using a small model for speed and low resource usage
             self.model = YOLO('yolov8n.pt') 
 
+    @debug_trace
     def describe_image(self, image_input):
         """
         Analyzes an image and returns a description of objects found.
