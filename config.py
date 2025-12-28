@@ -14,6 +14,9 @@ class Config:
     VOICE_RATE = 150
     VOICE_VOLUME = 1.0
     
+    # Dev/Test Settings
+    ENABLE_TEST_DATA = os.getenv('ENABLE_TEST_DATA', 'False').lower() == 'true'
+    
     # Directories to ensure exist
     DIRS_TO_CREATE = [
         os.path.join(DATA_DIR, 'user_profiles'),

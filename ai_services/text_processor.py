@@ -36,7 +36,13 @@ class TextProcessor:
         if not text:
             return ""
             
-        if self.use_openai:
+        # Test Mode Check
+        if Config.ENABLE_TEST_DATA:
+            return f"[TEST DATA] This is a simplified version of your text. ({level})"
+
+        # Dynamic Key Check
+        if Config.OPENAI_API_KEY and Config.OPENAI_API_KEY.startswith("sk-"):
+            openai.api_key = Config.OPENAI_API_KEY
             return self._simplify_with_openai(text, level)
         else:
             return self._simplify_with_hf(text, level)
@@ -44,7 +50,12 @@ class TextProcessor:
     @debug_trace
     def summarize_text(self, text):
         """Summarizes long text."""
-        if self.use_openai:
+        # Test Mode Check
+        if Config.ENABLE_TEST_DATA:
+            return "[TEST DATA] - Point 1\n- Point 2\n- Point 3"
+
+        if Config.OPENAI_API_KEY and Config.OPENAI_API_KEY.startswith("sk-"):
+            openai.api_key = Config.OPENAI_API_KEY
             return self._summarize_with_openai(text)
         else:
             return self._summarize_with_hf(text)

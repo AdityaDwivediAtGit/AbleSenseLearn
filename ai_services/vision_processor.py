@@ -21,6 +21,17 @@ class VisionProcessor:
         Analyzes an image and returns a description of objects found.
         image_input: PIL Image or bytes
         """
+        # Test Mode Check
+        from config import Config
+        if Config.ENABLE_TEST_DATA:
+            import random
+            mocks = [
+                "I see a laptop, a coffee mug on a wooden table, and a bright window in the background.",
+                "There is a red car parked on the street with two people walking nearby.",
+                "I see a text document with a blue header and a logo in the top right corner."
+            ]
+            return f"[TEST DATA] {random.choice(mocks)}"
+
         self._load_model()
         
         # Convert PIL image to format expected by YOLO if needed

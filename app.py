@@ -205,6 +205,17 @@ def main():
     with st.sidebar:
         st.title("🤖 Able Sense")
         
+        # Configuration Section
+        with st.expander("⚙️ System Config", expanded=False):
+            api_key = st.text_input("OpenAI API Key", type="password", placeholder="sk-...", help="Overrides .env key")
+            if api_key:
+                Config.OPENAI_API_KEY = api_key
+            
+            test_mode = st.checkbox("Enable Test Data Mode", value=Config.ENABLE_TEST_DATA, help="Use mock data instead of real AI calls")
+            Config.ENABLE_TEST_DATA = test_mode
+            if test_mode:
+                st.warning("⚠️ Test Mode Active")
+
         # Load user
         db = get_db_session()
         # For prototype, just get first user or create one
