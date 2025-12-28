@@ -15,6 +15,8 @@ from utils.ui_helpers import load_css
 # using st.cache_resource for persistent services
 @st.cache_resource
 def get_services():
+    # Ensure directories exist
+    Config.init_app()
     return {
         'vision': VisionProcessor(),
         'text': TextProcessor(),
@@ -26,6 +28,10 @@ services = get_services()
 # Database Setup
 engine = create_engine(Config.DATABASE_URL)
 Session = sessionmaker(bind=engine)
+
+# Ensure tables exist (Robustness for Streamlit Cloud/Local)
+from models.user import Base
+Base.metadata.create_all(engine)
 
 def get_db_session():
     return Session()
@@ -204,9 +210,18 @@ def main():
         # For prototype, just get first user or create one
         user = db.query(User).first()
         if not user:
-            # Fallback if DB setup failed or empty
-            st.error("No user found. Run setup_database.py")
-            return
+            # Auto-create user if missing (Fail-safe)
+            user = User(
+                username="demo_user",
+                disability_type="visual",
+                severity="moderate",
+                font_size=20,
+                voice_enabled=True,
+                medical_info="Diabetic. Allergic to penicillin."
+            )
+            db.add(user)
+            db.commit()
+            st.toast("Created demo user profile")
             
         st.write(f"User: **{user.username}**")
         
