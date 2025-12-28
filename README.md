@@ -43,5 +43,8 @@
 - **AI/ML**: OpenAI GPT-3.5 (Text), YOLOv8 (Vision), SpeechRecognition & pyttsx3 (Voice)
 - **Database**: SQLite (via SQLAlchemy)
 
+## Architecture & Flow
+For a detailed understanding of how the system works, including data flow diagrams and component breakdowns, please refer to the **[System Architecture & Flow](Flow.md)** documentation.
+
 ## Accessibility
 Designed with WCAG principles, supporting screen readers and keyboard navigation.
