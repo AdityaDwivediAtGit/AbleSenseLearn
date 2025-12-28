@@ -1,0 +1,599 @@
+{% extends "base.html" %}
+
+{% block title %}Home - AbleSense Learn{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero" aria-labelledby="hero-heading">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1 id="hero-heading" class="hero-title">
+                Where <span class="highlight">Accessibility</span> Meets 
+                <span class="highlight">Artificial Intelligence</span>
+            </h1>
+            
+            <p class="hero-description">
+                AbleSense Learn is an AI-powered platform that dynamically adapts educational content 
+                to meet the unique needs of every student, making learning truly accessible.
+            </p>
+            
+            <div class="hero-actions">
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">
+                    Get Started
+                </a>
+                <a href="#features" class="btn btn-outline btn-lg">
+                    Learn More
+                </a>
+                {% else %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">
+                    Go to Dashboard
+                </a>
+                <a href="{{ url_for('accessibility_tools') }}" class="btn btn-outline btn-lg">
+                    Try AI Tools
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="hero-image">
+            <img src="{{ url_for('static', filename='images/hero-illustration.svg') }}" 
+                 alt="Illustration showing diverse students learning with adaptive technology">
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features-section" aria-labelledby="features-heading">
+    <div class="section-header">
+        <h2 id="features-heading" class="section-title">
+            AI-Powered Accessibility Features
+        </h2>
+        <p class="section-subtitle">
+            Our platform adapts in real-time to support diverse learning needs
+        </p>
+    </div>
+    
+    <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+                <span>📝</span>
+            </div>
+            <h3 class="feature-title">Intelligent Text Simplification</h3>
+            <p class="feature-description">
+                AI automatically adjusts text complexity based on individual reading levels, 
+                making content accessible for students with dyslexia and other learning disabilities.
+            </p>
+            <div class="feature-demo">
+                <button class="btn btn-sm btn-outline" data-action="demo-simplify">
+                    Try Demo
+                </button>
+            </div>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+                <span>🖼️</span>
+            </div>
+            <h3 class="feature-title">Automatic Image Description</h3>
+            <p class="feature-description">
+                Computer vision AI generates detailed alt-text for images, diagrams, and charts, 
+                providing equal access to visual content for blind and low-vision students.
+            </p>
+            <div class="feature-demo">
+                <button class="btn btn-sm btn-outline" data-action="demo-image-describe">
+                    Try Demo
+                </button>
+            </div>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+                <span>🎯</span>
+            </div>
+            <h3 class="feature-title">Personalized Learning Paths</h3>
+            <p class="feature-description">
+                Machine learning creates customized learning journeys that adapt to each student's 
+                pace, strengths, and challenges, ensuring optimal engagement and comprehension.
+            </p>
+            <div class="feature-demo">
+                <button class="btn btn-sm btn-outline" data-action="demo-pathway">
+                    Try Demo
+                </button>
+            </div>
+        </div>
+        
+        <!-- Feature 4 -->
+        <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">
+                <span>📊</span>
+            </div>
+            <h3 class="feature-title">Engagement Analytics</h3>
+            <p class="feature-description">
+                AI monitors learning patterns to detect frustration or disengagement, 
+                suggesting breaks or alternative content formats to maintain motivation.
+            </p>
+            <div class="feature-demo">
+                <button class="btn btn-sm btn-outline" data-action="demo-analytics">
+                    View Example
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works" aria-labelledby="how-it-works-heading">
+    <div class="section-header">
+        <h2 id="how-it-works-heading" class="section-title">
+            How AbleSense Learn Works
+        </h2>
+    </div>
+    
+    <div class="steps">
+        <div class="step">
+            <div class="step-number" aria-hidden="true">1</div>
+            <div class="step-content">
+                <h3>Create Your Accessibility Profile</h3>
+                <p>Tell us about your learning preferences, needs, and any accommodations required.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number" aria-hidden="true">2</div>
+            <div class="step-content">
+                <h3>Upload or Import Content</h3>
+                <p>Add your learning materials - our AI will analyze and prepare them for adaptation.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number" aria-hidden="true">3</div>
+            <div class="step-content">
+                <h3>AI Processes and Adapts</h3>
+                <p>Our algorithms automatically simplify text, describe images, and create alternative formats.</p>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number" aria-hidden="true">4</div>
+            <div class="step-content">
+                <h3>Learn in Your Preferred Way</h3>
+                <p>Access adapted content through our accessible interface with your preferred settings.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Section -->
+<section class="demo-section" aria-labelledby="demo-heading">
+    <div class="section-header">
+        <h2 id="demo-heading" class="section-title">
+            Try It Yourself
+        </h2>
+        <p class="section-subtitle">
+            Experience how AI can make learning more accessible
+        </p>
+    </div>
+    
+    <div class="demo-container">
+        <!-- Text Simplification Demo -->
+        <div class="demo-card" id="text-simplification-demo">
+            <h3>Text Simplification Demo</h3>
+            
+            <div class="demo-controls">
+                <label for="simplification-level">Simplification Level:</label>
+                <select id="simplification-level" class="form-control">
+                    <option value="basic">Basic (Very Simple)</option>
+                    <option value="intermediate" selected>Intermediate</option>
+                    <option value="advanced">Advanced (Minimal Changes)</option>
+                </select>
+            </div>
+            
+            <div class="demo-content">
+                <div class="demo-column">
+                    <h4>Original Text</h4>
+                    <textarea id="original-text" class="form-control" rows="6" 
+                              placeholder="Paste or type text to simplify...">
+Photosynthesis is the biochemical process through which autotrophic organisms, predominantly green plants, utilize solar radiation to synthesize organic compounds from inorganic substrates, namely carbon dioxide and water, thereby generating molecular oxygen as a metabolic byproduct.
+                    </textarea>
+                </div>
+                
+                <div class="demo-column">
+                    <h4>Simplified Text</h4>
+                    <div id="simplified-text" class="simplified-output" 
+                         aria-live="polite" role="region">
+                        <!-- AI-generated content will appear here -->
+                    </div>
+                </div>
+            </div>
+            
+            <button id="simplify-btn" class="btn btn-primary">
+                Simplify Text with AI
+            </button>
+        </div>
+        
+        <!-- Image Description Demo -->
+        <div class="demo-card" id="image-description-demo">
+            <h3>Image Description Demo</h3>
+            
+            <div class="demo-content">
+                <div class="demo-column">
+                    <h4>Upload an Image</h4>
+                    <div class="image-upload-area">
+                        <input type="file" id="image-upload" 
+                               accept="image/*" class="sr-only">
+                        <label for="image-upload" class="upload-label">
+                            <span class="upload-icon" aria-hidden="true">📁</span>
+                            <span>Choose an image or drag it here</span>
+                        </label>
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+                </div>
+                
+                <div class="demo-column">
+                    <h4>AI-Generated Description</h4>
+                    <div id="image-description" class="description-output"
+                         aria-live="polite" role="region">
+                        <p class="placeholder">Upload an image to see AI-generated description</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="describe-btn" class="btn btn-primary" disabled>
+                Generate Description with AI
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials" aria-labelledby="testimonials-heading">
+    <div class="section-header">
+        <h2 id="testimonials-heading" class="section-title">
+            What Educators and Students Say
+        </h2>
+    </div>
+    
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <div class="testimonial-content">
+                <p>"As a teacher with dyslexic students, this platform has been transformative. The AI text simplification allows all my students to engage with the same material at their level."</p>
+            </div>
+            <div class="testimonial-author">
+                <div class="author-avatar" aria-hidden="true">👨‍🏫</div>
+                <div class="author-info">
+                    <div class="author-name">Mr. Rodriguez</div>
+                    <div class="author-role">High School Science Teacher</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="testimonial-card">
+            <div class="testimonial-content">
+                <p>"Finally, a platform that understands my needs as a visually impaired student. The automatic image descriptions mean I don't miss out on diagrams and charts anymore."</p>
+            </div>
+            <div class="testimonial-author">
+                <div class="author-avatar" aria-hidden="true">👩‍🎓</div>
+                <div class="author-info">
+                    <div class="author-name">Sarah Chen</div>
+                    <div class="author-role">University Student</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="testimonial-card">
+            <div class="testimonial-content">
+                <p>"The personalized learning pathways have helped my son with ADHD stay engaged. The AI knows when he needs a break or a different approach."</p>
+            </div>
+            <div class="testimonial-author">
+                <div class="author-avatar" aria-hidden="true">👨‍👩‍👧‍👦</div>
+                <div class="author-info">
+                    <div class="author-name">The Johnson Family</div>
+                    <div class="author-role">Parents</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section" aria-labelledby="cta-heading">
+    <div class="cta-content">
+        <h2 id="cta-heading" class="cta-title">
+            Ready to Make Learning Accessible?
+        </h2>
+        <p class="cta-description">
+            Join educators, students, and institutions using AbleSense Learn to create inclusive learning environments.
+        </p>
+        
+        <div class="cta-actions">
+            {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-xl">
+                Start Free Trial
+            </a>
+            <a href="#" class="btn btn-outline btn-xl">
+                Schedule a Demo
+            </a>
+            {% else %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-xl">
+                Go to Dashboard
+            </a>
+            <a href="{{ url_for('accessibility_tools') }}" class="btn btn-outline btn-xl">
+                Explore Tools
+            </a>
+            {% endif %}
+        </div>
+        
+        <p class="cta-note">
+            Free for individual students and teachers. Institutional plans available.
+        </p>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Text Simplification Demo
+    const simplifyBtn = document.getElementById('simplify-btn');
+    const originalText = document.getElementById('original-text');
+    const simplifiedText = document.getElementById('simplified-text');
+    const simplificationLevel = document.getElementById('simplification-level');
+    
+    if (simplifyBtn) {
+        simplifyBtn.addEventListener('click', async function() {
+            const text = originalText.value.trim();
+            if (!text) {
+                alert('Please enter some text to simplify');
+                return;
+            }
+            
+            // Show loading state
+            simplifyBtn.classList.add('loading');
+            simplifyBtn.disabled = true;
+            simplifiedText.innerHTML = '<div class="loading-spinner"></div>';
+            
+            try {
+                const response = await AbleSenseLearn.simplifyText(
+                    text, 
+                    simplificationLevel.value
+                );
+                
+                if (response.error) {
+                    throw new Error('Simplification failed');
+                }
+                
+                simplifiedText.innerHTML = `
+                    <div class="simplified-result">
+                        <p>${response.simplified}</p>
+                        <div class="result-meta">
+                            <span class="complexity-score">
+                                Complexity reduced by ${Math.round((1 - response.simplified.length / text.length) * 100)}%
+                            </span>
+                        </div>
+                    </div>
+                `;
+                
+                AbleSenseLearn.announceToScreenReader('Text simplified successfully');
+                
+            } catch (error) {
+                simplifiedText.innerHTML = `
+                    <div class="error-message">
+                        <p>Unable to simplify text. Please try again.</p>
+                    </div>
+                `;
+                
+                AbleSenseLearn.announceToScreenReader('Text simplification failed');
+            } finally {
+                simplifyBtn.classList.remove('loading');
+                simplifyBtn.disabled = false;
+            }
+        });
+    }
+    
+    // Image Description Demo
+    const imageUpload = document.getElementById('image-upload');
+    const describeBtn = document.getElementById('describe-btn');
+    const imagePreview = document.getElementById('image-preview');
+    const imageDescription = document.getElementById('image-description');
+    
+    if (imageUpload) {
+        imageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file');
+                return;
+            }
+            
+            // Preview image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.innerHTML = `
+                    <img src="${e.target.result}" 
+                         alt="Preview of uploaded image" 
+                         class="preview-image">
+                `;
+                describeBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        });
+        
+        // Drag and drop support
+        const uploadLabel = document.querySelector('.upload-label');
+        if (uploadLabel) {
+            uploadLabel.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+            
+            uploadLabel.addEventListener('dragleave', function() {
+                this.classList.remove('dragover');
+            });
+            
+            uploadLabel.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    imageUpload.files = e.dataTransfer.files;
+                    imageUpload.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+    }
+    
+    if (describeBtn) {
+        describeBtn.addEventListener('click', async function() {
+            const file = imageUpload.files[0];
+            if (!file) return;
+            
+            // Show loading state
+            describeBtn.classList.add('loading');
+            describeBtn.disabled = true;
+            imageDescription.innerHTML = '<div class="loading-spinner"></div>';
+            
+            try {
+                const response = await AbleSenseLearn.describeImage(file);
+                
+                if (response.error) {
+                    throw new Error('Description failed');
+                }
+                
+                imageDescription.innerHTML = `
+                    <div class="description-result">
+                        <h5>AI Analysis:</h5>
+                        <p>${response.description}</p>
+                        <div class="result-meta">
+                            <span class="confidence">
+                                AI Confidence: ${response.confidence ? Math.round(response.confidence) + '%' : 'High'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                
+                AbleSenseLearn.announceToScreenReader('Image description generated successfully');
+                
+            } catch (error) {
+                imageDescription.innerHTML = `
+                    <div class="error-message">
+                        <p>Unable to generate description. Please try another image.</p>
+                    </div>
+                `;
+                
+                AbleSenseLearn.announceToScreenReader('Image description failed');
+            } finally {
+                describeBtn.classList.remove('loading');
+                describeBtn.disabled = false;
+            }
+        });
+    }
+    
+    // Demo feature buttons
+    document.querySelectorAll('[data-action^="demo-"]').forEach(button => {
+        button.addEventListener('click', function() {
+            const action = this.dataset.action;
+            
+            switch(action) {
+                case 'demo-simplify':
+                    document.getElementById('text-simplification-demo').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    document.getElementById('original-text').focus();
+                    break;
+                    
+                case 'demo-image-describe':
+                    document.getElementById('image-description-demo').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    break;
+                    
+                case 'demo-pathway':
+                    if (window.AbleSenseLearn && AbleSenseLearn.announceToScreenReader) {
+                        AbleSenseLearn.announceToScreenReader(
+                            'Learning pathway demo requires user account. Please sign in to try this feature.'
+                        );
+                    }
+                    break;
+                    
+                case 'demo-analytics':
+                    // Show analytics modal
+                    showAnalyticsModal();
+                    break;
+            }
+        });
+    });
+});
+
+function showAnalyticsModal() {
+    // Create and show modal with analytics demo
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-dialog" role="dialog" aria-labelledby="analytics-modal-title">
+            <div class="modal-header">
+                <h3 id="analytics-modal-title">Engagement Analytics Demo</h3>
+                <button class="close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>This demo shows how AI analyzes learning patterns to improve engagement:</p>
+                <div class="analytics-chart">
+                    <div class="chart-placeholder">
+                        <p>Engagement levels over time would be displayed here</p>
+                    </div>
+                </div>
+                <div class="insights">
+                    <h4>AI Insights:</h4>
+                    <ul>
+                        <li>Student shows high engagement with visual content</li>
+                        <li>Reading comprehension improves with simplified text</li>
+                        <li>Optimal study session length: 25 minutes</li>
+                        <li>Recommended break interval: Every 45 minutes</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Show modal
+    setTimeout(() => modal.classList.add('show'), 10);
+    
+    // Close handlers
+    modal.querySelector('.close').addEventListener('click', () => {
+        modal.classList.remove('show');
+        setTimeout(() => modal.remove(), 300);
+    });
+    
+    modal.querySelector('[data-dismiss="modal"]').addEventListener('click', () => {
+        modal.classList.remove('show');
+        setTimeout(() => modal.remove(), 300);
+    });
+    
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('show');
+            setTimeout(() => modal.remove(), 300);
+        }
+    });
+    
+    // Trap focus in modal
+    const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]');
+    if (focusable.length > 0) {
+        focusable[0].focus();
+    }
+}
+</script>
+{% endblock %}

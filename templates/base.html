@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AbleSense Learn - AI-powered accessible learning platform">
+    <meta name="keywords" content="accessible education, AI learning, disability support, inclusive education">
+    <meta name="author" content="AbleSense Learn Team">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="AbleSense Learn - Inclusive Education Platform">
+    <meta property="og:description" content="AI-powered adaptive learning for students with disabilities">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url_for('index', _external=True) }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/accessibility.css') }}">
+    
+    <!-- Dyslexia Font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/css/open-dyslexic.min.css">
+    
+    <!-- Page Title -->
+    <title>{% block title %}AbleSense Learn{% endblock %}</title>
+    
+    {% block head_extras %}{% endblock %}
+</head>
+<body>
+    <!-- Skip to Main Content -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="main-header" role="banner">
+        <div class="container header-content">
+            <!-- Logo -->
+            <a href="{{ url_for('index') }}" class="logo">
+                <img src="{{ url_for('static', filename='images/logos/logo.svg') }}" 
+                     alt="AbleSense Learn Logo" 
+                     class="logo-image">
+                <span class="logo-text">AbleSense Learn</span>
+            </a>
+            
+            <!-- Main Navigation -->
+            <nav class="main-nav" aria-label="Main Navigation">
+                <button class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-menu">
+                    <span class="hamburger" aria-hidden="true"></span>
+                </button>
+                
+                <ul id="primary-menu" class="nav-list" role="menubar">
+                    <li role="none">
+                        <a href="{{ url_for('index') }}" 
+                           class="nav-link {% if request.path == '/' %}active{% endif %}"
+                           role="menuitem"
+                           aria-current="{% if request.path == '/' %}page{% endif %}">
+                            Home
+                        </a>
+                    </li>
+                    <li role="none">
+                        <a href="{{ url_for('dashboard') }}" 
+                           class="nav-link {% if request.path.startswith('/dashboard') %}active{% endif %}"
+                           role="menuitem"
+                           aria-current="{% if request.path.startswith('/dashboard') %}page{% endif %}">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li role="none" class="has-dropdown">
+                        <button class="nav-link dropdown-toggle" 
+                                aria-haspopup="true" 
+                                aria-expanded="false"
+                                role="menuitem">
+                            Tools
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-label="Tools Submenu">
+                            <li role="none">
+                                <a href="{{ url_for('accessibility_tools') }}" 
+                                   class="dropdown-item"
+                                   role="menuitem">
+                                    Accessibility Tools
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="#" class="dropdown-item" role="menuitem">Text Simplifier</a>
+                            </li>
+                            <li role="none">
+                                <a href="#" class="dropdown-item" role="menuitem">Image Descriptor</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li role="none">
+                        <a href="#" class="nav-link" role="menuitem">Resources</a>
+                    </li>
+                    <li role="none">
+                        <a href="#" class="nav-link" role="menuitem">Support</a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- User and Accessibility Controls -->
+            <div class="header-controls">
+                <!-- Accessibility Controls -->
+                <div class="accessibility-controls">
+                    <button class="accessibility-btn" 
+                            data-preference="highContrast"
+                            aria-label="Toggle high contrast mode"
+                            title="High Contrast (Ctrl+H)">
+                        <span aria-hidden="true">👁️</span>
+                    </button>
+                    
+                    <button class="accessibility-btn" 
+                            data-preference="dyslexiaMode"
+                            aria-label="Toggle dyslexia-friendly mode"
+                            title="Dyslexia Mode (Ctrl+D)">
+                        <span aria-hidden="true">📖</span>
+                    </button>
+                    
+                    <button class="accessibility-btn" 
+                            data-preference="largeText"
+                            aria-label="Increase text size"
+                            title="Text Size (Ctrl+M)">
+                        <span aria-hidden="true">🔍</span>
+                    </button>
+                    
+                    <button class="accessibility-btn" 
+                            data-preference="reducedMotion"
+                            aria-label="Toggle reduced motion"
+                            title="Reduce Motion">
+                        <span aria-hidden="true">🎬</span>
+                    </button>
+                </div>
+                
+                <!-- User Controls -->
+                <div class="user-controls">
+                    {% if current_user.is_authenticated %}
+                    <div class="user-dropdown">
+                        <button class="user-menu-toggle" 
+                                aria-haspopup="true" 
+                                aria-expanded="false"
+                                aria-label="User menu">
+                            <span class="user-avatar" aria-hidden="true">
+                                {{ current_user.username[0]|upper }}
+                            </span>
+                            <span class="username">{{ current_user.username }}</span>
+                        </button>
+                        <ul class="user-dropdown-menu" role="menu" aria-label="User menu">
+                            <li role="none">
+                                <a href="{{ url_for('dashboard') }}" class="dropdown-item" role="menuitem">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li role="none">
+                                <a href="#" class="dropdown-item" role="menuitem">Profile Settings</a>
+                            </li>
+                            <li role="separator"></li>
+                            <li role="none">
+                                <a href="{{ url_for('logout') }}" class="dropdown-item" role="menuitem">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <div class="auth-buttons">
+                        <a href="{{ url_for('login') }}" class="btn btn-outline">Login</a>
+                        <a href="{{ url_for('register') }}" class="btn btn-primary">Sign Up</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        <div class="container">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <!-- Page Content -->
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="main-footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <!-- About Section -->
+                <div class="footer-section">
+                    <h3>About AbleSense Learn</h3>
+                    <p>An AI-powered platform making education accessible for all students, regardless of ability.</p>
+                    <div class="footer-contact">
+                        <p>Email: <a href="mailto:support@ablesense.org">support@ablesense.org</a></p>
+                        <p>Phone: <a href="tel:+15551234567">+1 (555) 123-4567</a></p>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ url_for('accessibility_tools') }}">Accessibility Tools</a></li>
+                        <li><a href="#">Resources</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Accessibility Resources -->
+                <div class="footer-section">
+                    <h3>Accessibility</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" data-action="toggle-high-contrast">High Contrast Mode</a></li>
+                        <li><a href="#" data-action="toggle-dyslexia-mode">Dyslexia-Friendly Font</a></li>
+                        <li><a href="#" data-action="increase-text-size">Increase Text Size</a></li>
+                        <li><a href="#" data-action="decrease-text-size">Decrease Text Size</a></li>
+                        <li><a href="#" data-action="reset-accessibility">Reset All Settings</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter">
+                            <span aria-hidden="true">🐦</span>
+                        </a>
+                        <a href="#" aria-label="Facebook">
+                            <span aria-hidden="true">📘</span>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <span aria-hidden="true">💼</span>
+                        </a>
+                        <a href="#" aria-label="GitHub">
+                            <span aria-hidden="true">🐙</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="copyright">
+                <p>&copy; 2024 AbleSense Learn. All rights reserved.</p>
+                <p>Built with ❤️ for the ACCESS.AI Hackathon.</p>
+                <p class="accessibility-statement">
+                    This website is designed to be accessible to all users.
+                    <a href="#">View our accessibility statement</a>.
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/accessibility.js') }}"></script>
+    
+    {% block scripts %}{% endblock %}
+    
+    <!-- SVG Filters for Color Blind Modes (Hidden) -->
+    <svg style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+        <defs>
+            <filter id="protanopia-filter">
+                <feColorMatrix type="matrix" values="0.567, 0.433, 0, 0, 0 0.558, 0.442, 0, 0, 0 0, 0.242, 0.758, 0, 0 0, 0, 0, 1, 0"></feColorMatrix>
+            </filter>
+            <filter id="deuteranopia-filter">
+                <feColorMatrix type="matrix" values="0.625, 0.375, 0, 0, 0 0.7, 0.3, 0, 0, 0 0, 0.3, 0.7, 0, 0 0, 0, 0, 1, 0"></feColorMatrix>
+            </filter>
+            <filter id="tritanopia-filter">
+                <feColorMatrix type="matrix" values="0.95, 0.05, 0, 0, 0 0, 0.433, 0.567, 0, 0 0, 0.475, 0.525, 0, 0 0, 0, 0, 1, 0"></feColorMatrix>
+            </filter>
+        </defs>
+    </svg>
+    
+    <!-- ARIA Live Region for Dynamic Updates -->
+    <div id="live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+</body>
+</html>
