@@ -206,12 +206,32 @@ def main():
         st.title("🤖 Able Sense")
         
         # Configuration Section
-        with st.expander("⚙️ System Config", expanded=False):
-            api_key = st.text_input("OpenAI API Key", type="password", placeholder="sk-...", help="Overrides .env key")
-            if api_key:
-                Config.OPENAI_API_KEY = api_key
+        with st.expander("⚙️ System Config", expanded=True):
+            # Model Provider Selection
+            provider = st.selectbox("AI Provider", ["DeepSeek", "OpenAI", "HuggingFace"], index=0)
+            Config.AI_PROVIDER = provider
             
-            test_mode = st.checkbox("Enable Test Data Mode", value=Config.ENABLE_TEST_DATA, help="Use mock data instead of real AI calls")
+            # Dynamic Link & Config
+            if provider == "DeepSeek":
+                st.markdown("[Get API Key (DeepSeek)](https://platform.deepseek.com/)")
+                Config.AI_BASE_URL = "https://api.deepseek.com"
+                Config.AI_MODEL_NAME = "deepseek-chat"
+            elif provider == "OpenAI":
+                st.markdown("[Get API Key (OpenAI)](https://platform.openai.com/api-keys)")
+                Config.AI_BASE_URL = "https://api.openai.com/v1"
+                Config.AI_MODEL_NAME = "gpt-3.5-turbo"
+            elif provider == "HuggingFace":
+                st.markdown("[Get Token (HuggingFace)](https://huggingface.co/settings/tokens)")
+                # HF Logic handled in processor (uses local or API)
+            
+            # API Key Input
+            api_key = st.text_input(f"{provider} API Key", type="password", placeholder="Paste key/token here...")
+            if api_key:
+                Config.OPENAI_API_KEY = api_key # We reuse this variable for the active key
+            
+            # Test Mode
+            st.divider()
+            test_mode = st.checkbox("Enable Test Data Mode", value=Config.ENABLE_TEST_DATA, help="Mock data (Free/Fast)")
             Config.ENABLE_TEST_DATA = test_mode
             if test_mode:
                 st.warning("⚠️ Test Mode Active")

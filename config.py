@@ -17,6 +17,12 @@ class Config:
     # Dev/Test Settings
     ENABLE_TEST_DATA = os.getenv('ENABLE_TEST_DATA', 'False').lower() == 'true'
     
+    # AI Provider Settings
+    AI_PROVIDER = "DeepSeek" # Default
+    AI_BASE_URL = "https://api.deepseek.com"
+    AI_MODEL_NAME = "deepseek-chat"
+
+    
     # Directories to ensure exist
     DIRS_TO_CREATE = [
         os.path.join(DATA_DIR, 'user_profiles'),

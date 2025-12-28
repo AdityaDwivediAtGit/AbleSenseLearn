@@ -40,27 +40,41 @@ class TextProcessor:
         if Config.ENABLE_TEST_DATA:
             return f"[TEST DATA] This is a simplified version of your text. ({level})"
 
-        # Dynamic Key Check
-        if Config.OPENAI_API_KEY and Config.OPENAI_API_KEY.startswith("sk-"):
+        # Logic: If HuggingFace is selected, use HF (Local). 
+        # If OpenAI/DeepSeek selected AND key exists, use OpenAI client with custom base_url.
+        
+        if Config.AI_PROVIDER == "HuggingFace":
+            return self._simplify_with_hf(text, level)
+            
+        # For OpenAI or DeepSeek
+        if Config.OPENAI_API_KEY:
+            # Re-configure OpenAI client dynamically
             openai.api_key = Config.OPENAI_API_KEY
+            openai.base_url = Config.AI_BASE_URL
             return self._simplify_with_openai(text, level)
         else:
+            # Fallback if no key provided but provider selected? 
+            # We'll default to HF local if they forgot key, or return error string?
+            # Let's fallback to HF local for robustness
             return self._simplify_with_hf(text, level)
 
     @debug_trace
     def summarize_text(self, text):
         """Summarizes long text."""
-        # Test Mode Check
         if Config.ENABLE_TEST_DATA:
             return "[TEST DATA] - Point 1\n- Point 2\n- Point 3"
 
-        if Config.OPENAI_API_KEY and Config.OPENAI_API_KEY.startswith("sk-"):
-            openai.api_key = Config.OPENAI_API_KEY
-            return self._summarize_with_openai(text)
-        else:
+        if Config.AI_PROVIDER == "HuggingFace":
             return self._summarize_with_hf(text)
 
-    # --- OpenAI Implementations ---
+        if Config.OPENAI_API_KEY:
+            openai.api_key = Config.OPENAI_API_KEY
+            openai.base_url = Config.AI_BASE_URL
+            return self._summarize_with_openai(text)
+        else:
+           return self._summarize_with_hf(text)
+
+    # --- OpenAI/DeepSeek Implementations ---
     def _simplify_with_openai(self, text, level):
         system_prompt = "You are a helpful assistant that simplifies complex text."
         if level == "very_simple":
@@ -71,8 +85,9 @@ class TextProcessor:
             prompt = f"Simplify this text: \n\n{text}"
 
         try:
+            # Note: We use Config.AI_MODEL_NAME
             response = openai.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model=Config.AI_MODEL_NAME,
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -81,12 +96,12 @@ class TextProcessor:
             )
             return response.choices[0].message.content
         except Exception as e:
-            return f"OpenAI Error: {str(e)}. Falling back to local model..."
+            return f"{Config.AI_PROVIDER} Error: {str(e)}. Falling back to local model..."
 
     def _summarize_with_openai(self, text):
         try:
             response = openai.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model=Config.AI_MODEL_NAME,
                 messages=[
                     {"role": "system", "content": "Summarize key points."},
                     {"role": "user", "content": text}
@@ -95,7 +110,7 @@ class TextProcessor:
             )
             return response.choices[0].message.content
         except Exception as e:
-            return f"OpenAI Error: {str(e)}"
+            return f"{Config.AI_PROVIDER} Error: {str(e)}"
 
     # --- Hugging Face Implementations ---
     def _simplify_with_hf(self, text, level):
