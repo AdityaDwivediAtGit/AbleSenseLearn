@@ -201,6 +201,9 @@ def main():
     if 'page' not in st.session_state:
         st.session_state.page = 'Dashboard'
         
+    if 'messages' not in st.session_state:
+        st.session_state.messages = []
+        
     # Sidebar
     with st.sidebar:
         st.title("🤖 Able Sense")
