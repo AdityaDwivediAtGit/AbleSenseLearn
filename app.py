@@ -157,11 +157,16 @@ def render_learning():
                 result = services['text'].summarize_text(input_text)
             else:
                 result = services['text'].simplify_text(input_text, level="explain_like_im_5")
-                
+            
+            # Store in session state
+            st.session_state['learning_result'] = result
+
+    # Display result if available
+    if 'learning_result' in st.session_state:
         st.markdown("### Result:")
-        st.write(result)
+        st.write(st.session_state['learning_result'])
         if st.button("🔊 Read Result"):
-            audio_path, is_temp = services['voice'].speak(result)
+            audio_path, is_temp = services['voice'].speak(st.session_state['learning_result'])
             if audio_path:
                 st.audio(audio_path, format='audio/mp3', autoplay=True)
 
