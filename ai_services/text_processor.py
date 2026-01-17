@@ -38,9 +38,7 @@ class TextProcessor:
         if not text:
             return ""
             
-        # Test Mode Check
-        if Config.ENABLE_TEST_DATA:
-            return f"[TEST DATA] This is a simplified version of your text. ({level})"
+        # Logic: If HuggingFace is selected, use HF (Local).
 
         # Logic: If HuggingFace is selected, use HF (Local). 
         if Config.AI_PROVIDER == "HuggingFace":
@@ -55,9 +53,9 @@ class TextProcessor:
     @debug_trace
     def summarize_text(self, text):
         """Summarizes long text."""
-        if Config.ENABLE_TEST_DATA:
-            return "[TEST DATA] - Point 1\n- Point 2\n- Point 3"
-
+    @debug_trace
+    def summarize_text(self, text):
+        """Summarizes long text."""
         if Config.AI_PROVIDER == "HuggingFace":
             return self._summarize_with_hf(text)
 
