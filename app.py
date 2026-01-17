@@ -11,6 +11,15 @@ from ai_services.text_processor import TextProcessor
 from ai_services.voice_assistant import VoiceAssistant
 from utils.ui_helpers import load_css
 
+
+# Page Config must be the first Streamlit command
+st.set_page_config(
+    page_title="Able Sense AI Buddy",
+    page_icon="🤖",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 # Initialize Engines/Services
 # using st.cache_resource for persistent services
 @st.cache_resource
@@ -194,12 +203,7 @@ def render_settings(user, db_session):
 # --- Main App ---
 
 def main():
-    st.set_page_config(
-        page_title="Able Sense AI Buddy",
-        page_icon="🤖",
-        layout="wide",
-        initial_sidebar_state="expanded"
-    )
+
     
     load_css()
     
