@@ -1,0 +1,13 @@
+{
+    "subject": "Math",
+    "topic": "Algebra",
+    "difficulty": "Intermediate",
+    "problem": {
+        "text": "Solve for x: 2x + 5 = 15",
+        "hints": [
+            "Subtract 5 from both sides.",
+            "Divide by 2."
+        ],
+        "solution": "x = 5"
+    }
+}

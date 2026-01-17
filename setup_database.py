@@ -20,18 +20,52 @@ def init_db():
     session = Session()
     
     if session.query(User).count() == 0:
-        print("Creating sample user...")
-        sample_user = User(
-            username="demo_user",
-            disability_type="visual",
-            severity="moderate",
-            font_size=20,
-            voice_enabled=True,
-            medical_info="Diabetic. Allergic to penicillin."
-        )
-        session.add(sample_user)
+        print("Creating sample users...")
+        users = [
+            User(
+                username="demo_user",
+                disability_type="visual",
+                severity="moderate",
+                font_size=20,
+                voice_enabled=True,
+                medical_info="Diabetic. Allergic to penicillin."
+            ),
+            User(
+                username="alice_visual",
+                disability_type="visual",
+                severity="severe",
+                font_size=24,
+                voice_enabled=True,
+                medical_info="None"
+            ),
+            User(
+                username="bob_audio",
+                disability_type="auditory",
+                severity="severe",
+                font_size=16,
+                voice_enabled=False,
+                medical_info="Uses hearing aid."
+            ),
+            User(
+                username="charlie_cognitive",
+                disability_type="cognitive",
+                severity="moderate",
+                font_size=18,
+                voice_enabled=True,
+                medical_info="Easily distracted."
+            ),
+            User(
+                username="david_motor",
+                disability_type="motor",
+                severity="severe",
+                font_size=16,
+                voice_enabled=True,
+                medical_info="Uses eye-tracking software."
+            )
+        ]
+        session.add_all(users)
         session.commit()
-        print("Sample user 'demo_user' created.")
+        print("Sample users created: demo_user, alice_visual, bob_audio, charlie_cognitive, david_motor.")
     
     session.close()
 

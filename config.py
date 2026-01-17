@@ -19,8 +19,14 @@ class Config:
     
     # AI Provider Settings
     AI_PROVIDER = "DeepSeek" # Default
-    AI_BASE_URL = "https://api.deepseek.com"
-    AI_MODEL_NAME = "deepseek-chat"
+    AI_BASE_URL = "https://genailab.tcs.in"
+    AI_MODEL_NAME = "azure_ai/genailab-maas-DeepSeek-V3-0324"
+    AI_SSL_VERIFY = False # Disable SSL verify for internal proxy
+    
+    # Validation
+    if AI_PROVIDER == "DeepSeek" and not OPENAI_API_KEY:
+        # We might want to warn or handle this, but for now just let it be.
+        pass
 
     
     # Directories to ensure exist

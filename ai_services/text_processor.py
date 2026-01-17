@@ -1,4 +1,6 @@
 import openai
+import httpx
+from langchain_openai import ChatOpenAI
 from config import Config
 from transformers import pipeline
 from utils.debug import debug_trace
@@ -41,21 +43,13 @@ class TextProcessor:
             return f"[TEST DATA] This is a simplified version of your text. ({level})"
 
         # Logic: If HuggingFace is selected, use HF (Local). 
-        # If OpenAI/DeepSeek selected AND key exists, use OpenAI client with custom base_url.
-        
         if Config.AI_PROVIDER == "HuggingFace":
             return self._simplify_with_hf(text, level)
             
-        # For OpenAI or DeepSeek
+        # For OpenAI or DeepSeek (via LiteLLM Proxy)
         if Config.OPENAI_API_KEY:
-            # Re-configure OpenAI client dynamically
-            openai.api_key = Config.OPENAI_API_KEY
-            openai.base_url = Config.AI_BASE_URL
-            return self._simplify_with_openai(text, level)
+            return self._process_with_llm(text, task_type="simplify", level=level)
         else:
-            # Fallback if no key provided but provider selected? 
-            # We'll default to HF local if they forgot key, or return error string?
-            # Let's fallback to HF local for robustness
             return self._simplify_with_hf(text, level)
 
     @debug_trace
@@ -68,49 +62,52 @@ class TextProcessor:
             return self._summarize_with_hf(text)
 
         if Config.OPENAI_API_KEY:
-            openai.api_key = Config.OPENAI_API_KEY
-            openai.base_url = Config.AI_BASE_URL
-            return self._summarize_with_openai(text)
+            return self._process_with_llm(text, task_type="summarize")
         else:
            return self._summarize_with_hf(text)
 
-    # --- OpenAI/DeepSeek Implementations ---
-    def _simplify_with_openai(self, text, level):
-        system_prompt = "You are a helpful assistant that simplifies complex text."
-        if level == "very_simple":
-            prompt = f"Rewrite in very simple words: \n\n{text}"
-        elif level == "explain_like_im_5":
-            prompt = f"Explain like I am 5 years old: \n\n{text}"
-        else:
-            prompt = f"Simplify this text: \n\n{text}"
-
+    # --- Unified LLM Implementation ---
+    def _process_with_llm(self, text, task_type, level="simple"):
         try:
-            # Note: We use Config.AI_MODEL_NAME
-            response = openai.chat.completions.create(
+            # Configure HTTP Client (verify=False for internal proxy if needed)
+            http_client = httpx.Client(verify=Config.AI_SSL_VERIFY)
+            
+            # Initialize LangChain ChatOpenAI
+            llm = ChatOpenAI(
+                base_url=Config.AI_BASE_URL,
                 model=Config.AI_MODEL_NAME,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": prompt}
-                ],
+                api_key=Config.OPENAI_API_KEY,
+                http_client=http_client,
                 max_tokens=300
             )
-            return response.choices[0].message.content
+
+            # Construct Prompts
+            if task_type == "simplify":
+                system_prompt = "You are a helpful assistant that simplifies complex text."
+                if level == "very_simple":
+                    prompt = f"Rewrite in very simple words: \n\n{text}"
+                elif level == "explain_like_im_5":
+                    prompt = f"Explain like I am 5 years old: \n\n{text}"
+                else:
+                    prompt = f"Simplify this text: \n\n{text}"
+                
+                messages = [
+                    ("system", system_prompt),
+                    ("human", prompt)
+                ]
+                
+            elif task_type == "summarize":
+                messages = [
+                    ("system", "Summarize the following text efficiently."),
+                    ("human", text)
+                ]
+            
+            # Invoke Model
+            response = llm.invoke(messages)
+            return response.content
+
         except Exception as e:
             return f"{Config.AI_PROVIDER} Error: {str(e)}. Falling back to local model..."
-
-    def _summarize_with_openai(self, text):
-        try:
-            response = openai.chat.completions.create(
-                model=Config.AI_MODEL_NAME,
-                messages=[
-                    {"role": "system", "content": "Summarize key points."},
-                    {"role": "user", "content": text}
-                ],
-                max_tokens=200
-            )
-            return response.choices[0].message.content
-        except Exception as e:
-            return f"{Config.AI_PROVIDER} Error: {str(e)}"
 
     # --- Hugging Face Implementations ---
     def _simplify_with_hf(self, text, level):

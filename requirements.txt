@@ -16,3 +16,6 @@ requests
 watchdog
 huggingface_hub
 accelerate
+langchain
+langchain-openai
+httpx
