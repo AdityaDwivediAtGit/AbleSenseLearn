@@ -2,7 +2,6 @@ import openai
 import httpx
 from langchain_openai import ChatOpenAI
 from config import Config
-from transformers import pipeline
 from utils.debug import debug_trace
 
 class TextProcessor:
@@ -20,6 +19,7 @@ class TextProcessor:
     def _get_summarizer(self):
         if not self._summarizer:
             # Using a small, efficient model for local execution
+            from transformers import pipeline
             self._summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
         return self._summarizer
 
@@ -27,6 +27,7 @@ class TextProcessor:
     def _get_generator(self):
         if not self._generator:
             # Flan-T5 is great for instruction following like "Simplify this"
+            from transformers import pipeline
             self._generator = pipeline("text2text-generation", model="google/flan-t5-small")
         return self._generator
 
@@ -105,7 +106,12 @@ class TextProcessor:
             return response.content
 
         except Exception as e:
-            return f"{Config.AI_PROVIDER} Error: {str(e)}. Falling back to local model..."
+            print(f"[ERROR] {Config.AI_PROVIDER} Failed: {str(e)}. Falling back to local model...")
+            # Actual fallback logic
+            if task_type == "simplify":
+                return self._simplify_with_hf(text, level)
+            else:
+                return self._summarize_with_hf(text)
 
     # --- Hugging Face Implementations ---
     def _simplify_with_hf(self, text, level):

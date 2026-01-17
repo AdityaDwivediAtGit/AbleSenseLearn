@@ -18,9 +18,9 @@ class Config:
     ENABLE_TEST_DATA = os.getenv('ENABLE_TEST_DATA', 'False').lower() == 'true'
     
     # AI Provider Settings
-    AI_PROVIDER = "DeepSeek" # Default
-    AI_BASE_URL = "https://genailab.tcs.in"
-    AI_MODEL_NAME = "azure_ai/genailab-maas-DeepSeek-V3-0324"
+    AI_PROVIDER = os.getenv('AI_PROVIDER', 'DeepSeek')
+    AI_BASE_URL = os.getenv('AI_BASE_URL', 'https://genailab.tcs.in')
+    AI_MODEL_NAME = os.getenv('AI_MODEL_NAME', 'azure_ai/genailab-maas-DeepSeek-V3-0324')
     AI_SSL_VERIFY = False # Disable SSL verify for internal proxy
 
     
